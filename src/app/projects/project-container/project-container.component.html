@@ -1,0 +1,24 @@
+<ngptt-section-header [title]="'I nostri Progetti'" [button]="{label: 'Torna a Home', link: '/home'}"></ngptt-section-header>
+
+
+<ngptt-project-search (searching)="searchProject($event)"></ngptt-project-search>
+<hr/>
+<ngptt-project-list
+    *ngIf="projects.length > 0; else noProjects"
+    [projects]="projects
+    | searchFilter: 'name' : searchedProject?.name
+    | searchFilter: 'priority' : searchedProject?.priority
+    | searchFilter: 'done' : searchedProject?.done"
+    (selected)="selectProject($event)"
+></ngptt-project-list>
+  
+  <ng-template #noProjects>
+    <p>Non è presente alcun progetto</p>
+  </ng-template>
+  
+ <!--<p *ngIf="selectedProject">Progetto Selezionato: {{selectedProject.name}}</p>-->
+ <ngptt-project-detail *ngIf="selectedProject" [project]="selectedProject"></ngptt-project-detail>
+
+ <hr/>
+ <h2>Form di inserimento</h2>
+ <ngptt-project-form (submitted)="addNewProject($event)"></ngptt-project-form>
