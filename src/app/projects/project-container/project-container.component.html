@@ -3,15 +3,21 @@
 
 <ngptt-project-search (searching)="searchProject($event)"></ngptt-project-search>
 <hr/>
-<ngptt-project-list
-    *ngIf="projects.length > 0; else noProjects"
-    [projects]="projects
-    | searchFilter: 'name' : searchedProject?.name
-    | searchFilter: 'priority' : searchedProject?.priority
-    | searchFilter: 'done' : searchedProject?.done"
-    (selected)="selectProject($event)"
-></ngptt-project-list>
-  
+<ng-container *ngIf="(projectService.projects$ | async) as projects" >
+  <!--
+  quest tag non viene renderizzato, si renderizza direttamente ngptt project list.
+  In questo modo posso usaarlo per inserire direttive strutturali
+-->
+  <ngptt-project-list
+      *ngIf="projects.length > 0; else noProjects"
+      [projects]="projects
+      | searchFilter: 'name' : searchedProject?.name
+      | searchFilter: 'priority' : searchedProject?.priority
+      | searchFilter: 'done' : searchedProject?.done"
+      (selected)="selectProject($event)"
+  ></ngptt-project-list>
+</ng-container>
+
   <ng-template #noProjects>
     <p>Non è presente alcun progetto</p>
   </ng-template>
